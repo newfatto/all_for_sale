@@ -1,0 +1,54 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Помидор",
+      "description": null,
+      "image": "",
+      "category": 1,
+      "price": "100.00",
+      "created_at": "2025-10-13T07:30:16.629Z",
+      "updated_at": "2025-10-13T07:30:16.629Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "Огурец",
+      "description": null,
+      "image": "",
+      "category": 1,
+      "price": "80.00",
+      "created_at": "2025-10-13T07:33:20.370Z",
+      "updated_at": "2025-10-13T07:33:20.370Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Яблоко",
+      "description": null,
+      "image": "",
+      "category": 2,
+      "price": "80.00",
+      "created_at": "2025-10-13T07:33:41.966Z",
+      "updated_at": "2025-10-13T07:33:41.966Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "Груша",
+      "description": null,
+      "image": "",
+      "category": 2,
+      "price": "108.00",
+      "created_at": "2025-10-13T07:34:13.599Z",
+      "updated_at": "2025-10-13T07:45:02.697Z"
+    }
+  }
+]
