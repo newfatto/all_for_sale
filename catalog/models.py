@@ -30,3 +30,22 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["name", "price", "created_at"]
+
+
+class Contact(models.Model):
+    """Контактные данные, выводимые на странице 'Контакты'."""
+
+    name = models.CharField(max_length=100, verbose_name="Организация", default="Skystore")
+    email = models.EmailField(verbose_name="Email", blank=True)
+    phone = models.CharField(max_length=50, verbose_name="Телефон", blank=True)
+    address = models.CharField(max_length=255, verbose_name="Адрес", blank=True)
+    working_hours = models.CharField(max_length=255, verbose_name="Время работы", blank=True)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
+
+    def __str__(self):
+        return f"{self.name} ({self.phone or self.email})"
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакты"
+        ordering = ["-updated_at"]
