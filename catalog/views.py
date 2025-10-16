@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.core.paginator import Paginator
 
 from catalog.models import Contact, Product, Category
 
@@ -10,9 +11,16 @@ def home(request):
     for product in latest_products:
         print(f"{product.name} — {product.price} руб.")
 
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('id')
+    paginator = Paginator(products, 4)
 
-    context = {"products": products}
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'products': page_obj.object_list,
+    }
 
     return render(request, "home.html", context)
 
@@ -34,8 +42,8 @@ def product(request, product_id):
     context = {"product": product}
     return render(request, "product.html", context=context)
 
-def user_add_product(request):
 
+def user_add_product(request):
     categories = Category.objects.all()
     context = {'categories': categories}
 
@@ -50,4 +58,3 @@ def user_add_product(request):
         return HttpResponse(f"Спасибо. Товар {name} добавлен.")
 
     return render(request, 'user_add_product.html', context=context)
-
