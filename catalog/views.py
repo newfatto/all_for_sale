@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from catalog.models import Contact, Product
+from catalog.models import Contact, Product, Category
 
 
 def home(request):
@@ -33,3 +33,21 @@ def product(request, product_id):
     product = Product.objects.get(id=product_id)
     context = {"product": product}
     return render(request, "product.html", context=context)
+
+def user_add_product(request):
+
+    categories = Category.objects.all()
+    context = {'categories': categories}
+
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        image = request.FILES.get("image")
+        category_id = request.POST.get("category")
+        price = request.POST.get("price")
+        category = Category.objects.get(id=category_id)
+        Product.objects.create(name=name, description=description, image=image, category=category, price=price)
+        return HttpResponse(f"Спасибо. Товар {name} добавлен.")
+
+    return render(request, 'user_add_product.html', context=context)
+
