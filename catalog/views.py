@@ -10,7 +10,11 @@ def home(request):
     for product in latest_products:
         print(f"{product.name} — {product.price} руб.")
 
-    return render(request, "home.html")
+    products = Product.objects.all()
+
+    context = {"products": products}
+
+    return render(request, "home.html", context)
 
 
 def contacts(request):
@@ -23,3 +27,9 @@ def contacts(request):
         return HttpResponse(f"Спасибо, {name}. Сообщение получено.")
 
     return render(request, "contacts.html", {"contact": contact})
+
+
+def product(request, product_id):
+    product = Product.objects.get(id=product_id)
+    context = {"product": product}
+    return render(request, "product.html", context=context)
