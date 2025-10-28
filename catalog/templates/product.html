@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="image-wrapper mb-3">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top img-fluid product-info-image"
+                         alt="{{ product.name }}">
+                    {% endif %}
+                </div>
+                <h1 class="card-title pricing-card-title">{{ product.price }} руб.</h1>
+                <p class="mt-3 mb-4 text-start m-3">Категория: {{ product.category.name }}</p>
+                <p class="mt-3 mb-4 text-start m-3">Описание: {{ product.description }}</p>
+                <p class="mt-3 mb-4 text-start m-3">Товар создан: {{ product.created_at|date:'d M Y' }}</p>
+                <p class="mt-3 mb-4 text-start m-3">Товар создан: {{ product.updated_at|date:'d M Y' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
