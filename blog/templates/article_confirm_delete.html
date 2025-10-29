@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+
+<h2>Удаление статьи</h2>
+<p>Вы действительно хотите удалить "{{ article.title }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Подтвердить</button>
+    <a href="{% url 'blog:blog' %}" class="btn btn-primary">Отменить</a>
+</form>
+
+{% endblock %}
