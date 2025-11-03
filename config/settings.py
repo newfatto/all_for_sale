@@ -21,6 +21,7 @@ INSTALLED_APPS = [  # В этот список добавлять новые п�
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "catalog",
+    "blog",
 ]
 
 MIDDLEWARE = [
