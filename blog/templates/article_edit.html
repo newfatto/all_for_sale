@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Главная страница{% endblock %}
+{% block title %}Редактировать{% endblock %}
 
 {% block content %}
 
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Добавление новой статьи</h2>
+    <h2 class="mb-4 text-center">Редактировать статью</h2>
 
     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
