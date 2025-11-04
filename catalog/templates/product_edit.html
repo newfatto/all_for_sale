@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Редактирование товара{% endblock %}
+{% block title %}Раедактирование товар{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -8,47 +8,11 @@
 
     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
+        {{ form.as_p }}
+        {{ form.non_field_errors }}
 
-        <!-- Название -->
-        <div class="mb-3">
-            <label for="name" class="form-label">Название товара</label>
-            <input type="text" class="form-control" id="name" name="name"
-                   maxlength="100" required placeholder="Введите название товара">
-            <div class="form-text">Максимум 100 символов</div>
-        </div>
-
-        <!-- Описание -->
-        <div class="mb-3">
-            <label for="description" class="form-label">Описание</label>
-            <textarea class="form-control" id="description" name="description" rows="5"
-                      placeholder="Введите описание товара" required></textarea>
-        </div>
-
-        <!-- Картинка -->
-        <div class="mb-3">
-            <label for="image" class="form-label">Изображение</label>
-            <input type="file" class="form-control" id="image" name="image" accept="image/*">
-        </div>
-
-        <!-- Цена -->
-        <div class="mb-3">
-            <label for="price" class="form-label">Цена (в рублях)</label>
-            <input type="number" class="form-control" id="price" name="price"
-                   step="0.01" min="0" required placeholder="0.00">
-        </div>
-
-        <!-- Категория -->
-        <div class="mb-4">
-            <label for="category" class="form-label">Категория</label>
-            <select class="form-select" id="category" name="category" required>
-                <option value="">Выберите категорию...</option>
-                {% for cat in categories %}
-                    <option value="{{ cat.id }}">{{ cat.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100">Добавить товар</button>
+        <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+        <a href="{% url 'catalog:home' %}" class="btn btn-primary">Отменить</a>
     </form>
 </div>
 
