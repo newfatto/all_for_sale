@@ -1,10 +1,10 @@
 from django.http import HttpResponse
-from django.urls import reverse_lazy, reverse
-from django.views.generic import DetailView, ListView, TemplateView, DeleteView, UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DeleteView, DetailView, ListView, TemplateView, UpdateView
 from django.views.generic.edit import CreateView
 
-from catalog.models import Category, Contact, Product
 from catalog.forms import ProductForm
+from catalog.models import Category, Contact, Product
 
 
 class ProductListView(ListView):
@@ -60,6 +60,7 @@ class ProductCreateView(CreateView):
         context["categories"] = Category.objects.all()
         return context
 
+
 class ProductUpdateView(UpdateView):
     """Страница обновления информации о продукте пользователем"""
 
@@ -82,5 +83,4 @@ class ProductDeleteView(DeleteView):
     model = Product
     template_name = "product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
-    context_object_name = 'product'
-
+    context_object_name = "product"

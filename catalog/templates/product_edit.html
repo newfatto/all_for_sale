@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Раедактирование товар{% endblock %}
+{% block title %}Редактирование товар{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -11,7 +11,7 @@
         {{ form.as_p }}
         {{ form.non_field_errors }}
 
-        <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
         <a href="{% url 'catalog:home' %}" class="btn btn-primary">Отменить</a>
     </form>
 </div>
