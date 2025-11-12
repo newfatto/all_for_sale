@@ -28,5 +28,10 @@
     </div>
 </div>
 
+<a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-secondary">Редактировать</a>
+<a href="{% url 'catalog:product_confirm_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+<a href="{% url 'catalog:home' %}" class="btn btn-danger">Отмена</a>
+
+
 
 {% endblock %}
