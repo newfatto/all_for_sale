@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy
 
 from users.models import CustomUser
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, CustomUserAuthenticationForm
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import View
@@ -19,7 +19,7 @@ class RegisterView(CreateView):
     """
     model = CustomUser
     form_class = CustomUserCreationForm
-    template_name = 'users/register.html'
+    template_name = 'register.html'
     success_url = reverse_lazy('catalog:home')
 
     def form_valid(self, form):
@@ -27,10 +27,11 @@ class RegisterView(CreateView):
         Вызывается при валидной форме.
         Сохраняет пользователя, логинит его и отправляет письмо.
         """
-        user = form.save()
+        response = super().form_valid(form)
+        user = self.object
         login(self.request, user)
         self.send_welcome_email(user.email)
-        return super().form_valid(form)
+        return response
 
     def send_welcome_email(self, user_email):
         """
@@ -39,17 +40,17 @@ class RegisterView(CreateView):
         subject = 'Skystore дождался тебя'
         message = ('Ура! Ты зарегистрирован на сайте'
                    'Теперь тебе доступно то, что доступно зарегистрированным пользователям')
-        recipient_list = [user_email]
+        recipient_list = [user_email, ]
         send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
 
 
 class CustomLoginView(LoginView):
     """ Контроллер авторизации пользователя. """
-    template_name = 'registration/login.html'
-    success_url = reverse_lazy('catalog:home')
+    form_class = CustomUserAuthenticationForm
+    template_name = 'login.html'
+    next_page = reverse_lazy('catalog:home')
 
 
 class CustomLogoutView(LogoutView):
     """ Контроллер выхода пользователя из системы. """
-    def get_next_page(self):
-        return reverse_lazy('logged_out')  # Перенаправление на другую страницу после выхода
+    next_page = reverse_lazy('catalog:home')
