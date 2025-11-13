@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<h1>Редактирование профиля пользователя</h1>
+
+<form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ form.non_field_errors }}
+
+    <button type="submit">Сохранить изменения</button>
+</form>
+{% endblock %}
