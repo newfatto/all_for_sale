@@ -8,9 +8,20 @@ from .models import Product
 
 
 class ProductForm(forms.ModelForm):
+    """
+    Форма создания/редактирования продукта.
+
+    Поле is_published отображается только для пользователей,
+    у которых есть право catalog.can_unpublish_product.
+    """
+
     MAX_IMAGE_SIZE = 5 * 1024 * 1024
 
     def __init__(self, *args, **kwargs):
+        """
+        Инициализация формы. Поле is_published доступно только обладателю права 'can_unpublish_product'
+        """
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.fields["name"].widget.attrs.update({"class": "form-control", "placeholder": "Название продукта"})
 
@@ -46,9 +57,14 @@ class ProductForm(forms.ModelForm):
             }
         )
 
+        if not (self.user and self.user.has_perm("catalog.can_unpublish_product")):
+            self.fields.pop("is_published", None)
+
+        self.fields["is_published"].label = "Продукт опубликован"
+
     class Meta:
         model = Product
-        fields = ["name", "description", "image", "category", "price"]
+        fields = ["name", "description", "image", "category", "price", "is_published"]
 
     def clean_name(self):
         name = self.cleaned_data.get("name")

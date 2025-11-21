@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Контакты{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
 
@@ -27,11 +27,19 @@
         </div>
     </div>
 </div>
-
+{% if perms.catalog.update_product %}
 <a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-secondary">Редактировать</a>
+{% endif %}
+{% if perms.catalog.can_unpublish_product %}
+<form method="post" action="{% url 'catalog:unpublish_product' product.id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning">Снять с публикации</button>
+</form>
+{% endif %}
+{% if perms.catalog.delete_product %}
 <a href="{% url 'catalog:product_confirm_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+{% endif %}
 <a href="{% url 'catalog:home' %}" class="btn btn-danger">Отмена</a>
-
 
 
 {% endblock %}
