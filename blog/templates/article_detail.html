@@ -26,9 +26,12 @@
     </div>
 </div>
 
-
+{% if perms.blog.change_article %}
 <a href="{% url 'blog:article_edit' article.pk %}" class="btn btn-secondary">Редактировать</a>
+{% endif %}
+{% if perms.blog.delete_article %}
 <a href="{% url 'blog:article_delete' article.pk %}" class="btn btn-danger">Удалить</a>
+{% endif %}
 <a href="{% url 'blog:blog' %}" class="btn btn-danger">Отмена</a>
 
 
