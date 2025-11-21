@@ -60,7 +60,8 @@ class ProductForm(forms.ModelForm):
         if not (self.user and self.user.has_perm("catalog.can_unpublish_product")):
             self.fields.pop("is_published", None)
 
-        self.fields["is_published"].label = "Продукт опубликован"
+        if "is_published" in self.fields:
+            self.fields["is_published"].label = "Продукт опубликован"
 
     class Meta:
         model = Product
@@ -86,7 +87,7 @@ class ProductForm(forms.ModelForm):
 
     def clean_image(self):
         image = self.cleaned_data.get("image")
-        if not image:
+        if not image or not hasattr(image, "content_type"):
             return image
 
         if image.size > self.MAX_IMAGE_SIZE:
