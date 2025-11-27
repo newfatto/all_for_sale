@@ -1,22 +1,34 @@
 from django.conf import settings
 from django.core.cache import cache
 
-from .models import Product
+from .models import Category, Product
 
 
-def get_products_from_cache():
-    """
-    Возвращает список продуктов из кэша, если кэш включён.
-    Если записи нет — сохраняет queryset в кэш.
-    """
-    if not getattr( settings, 'CACHE_ENABLED', False):
-        return list(Product.objects.all().order_by("id"))
+class ProductServices:
 
-    key: str = 'product_list'
-    products: list[Product] | None = cache.get(key)
+    @staticmethod
+    def get_products_from_cache():
+        """
+        Возвращает список продуктов из кэша, если кэш включён.
+        Если записи нет — сохраняет queryset в кэш.
+        """
+        if not getattr(settings, "CACHE_ENABLED", False):
+            return list(Product.objects.all().order_by("id"))
 
-    if products is None:
-        products = list(Product.objects.all().order_by('id'))
-        cache.set(key, products)
+        key: str = "product_list"
+        products: list[Product] | None = cache.get(key)
 
-    return products
+        if products is None:
+            products = list(Product.objects.all().order_by("id"))
+            cache.set(key, products)
+
+        return products
+
+    @staticmethod
+    def get_products_for_category(category: Category) -> list:
+        """
+        Получение списка продуктов по указанной категории
+        :param category: категория, продукты из которой предстоит вернуть
+        :return: список продуктов
+        """
+        return list(Product.objects.filter(category=category))

@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView
 from catalog.forms import ProductForm
 from catalog.models import Category, Contact, Product
 
-from .services import get_products_from_cache
+from .services import ProductServices
 
 
 class ProductListView(ListView):
@@ -21,6 +21,11 @@ class ProductListView(ListView):
     context_object_name = "products"
     paginate_by = 4
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
     def get_queryset(self) -> list[Product]:
         """
         Возвращает список продуктов, используя кэш.
@@ -30,14 +35,32 @@ class ProductListView(ListView):
         """
 
         user = self.request.user
-        products: list[Product] = get_products_from_cache()
+        products: list[Product] = ProductServices.get_products_from_cache()
 
-        if user.is_authenticated and (
-                user.is_superuser
-                or user.has_perm("catalog.can_unpublish_product")):
+        if user.is_authenticated and (user.is_superuser or user.has_perm("catalog.can_unpublish_product")):
             return products
 
         return [p for p in products if p.is_published]
+
+
+class CategoryListView(ListView):
+    """
+    Cписок продуктов в конкретной категории с пагинатором и фильтром
+    """
+
+    model = Product
+    template_name = "category.html"
+    context_object_name = "products"
+    paginate_by = 4
+
+    def get_queryset(self) -> list[Product]:
+        category = get_object_or_404(Category, pk=self.kwargs["pk"])
+        return ProductServices.get_products_for_category(category)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context["category"] = get_object_or_404(Category, pk=self.kwargs["pk"])
+        return context
 
 
 class ContactsTemplateView(TemplateView):
