@@ -4,7 +4,9 @@
 
 {% block content %}
 
+{% if perms.blog.add_article %}
 <a class="p-2 btn btn-outline-primary" href="{% url 'blog:new_article' %}">Добавить статью</a>
+{% endif %}
 
 <h1 class="mb-4">Блог о вкусной и здоровой жизни</h1>
 
