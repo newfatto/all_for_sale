@@ -10,29 +10,57 @@ from django.views.generic.edit import CreateView
 from catalog.forms import ProductForm
 from catalog.models import Category, Contact, Product
 
+from .services import ProductServices
+
 
 class ProductListView(ListView):
-    """Главная страница: формируем список продуктов с пагинатором"""
+    """Главная страница: формируем список продуктов с пагинатором и фильтром"""
 
     model = Product
     template_name = "home.html"
     context_object_name = "products"
     paginate_by = 4
-    ordering = ["id"]
 
-    def get_queryset(self):
-        """Фильтруем продукты по статусу публикации.
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
 
+    def get_queryset(self) -> list[Product]:
+        """
+        Возвращает список продуктов, используя кэш.
+        Фильтруем продукты по статусу публикации.
         Обычный пользователь видит только опубликованные,
         модератор (с правом can_unpublish_product) и суперпользователь — все.
         """
-        qs = super().get_queryset().order_by("id")
+
         user = self.request.user
+        products: list[Product] = ProductServices.get_products_from_cache()
 
         if user.is_authenticated and (user.is_superuser or user.has_perm("catalog.can_unpublish_product")):
-            return qs
+            return products
 
-        return qs.filter(is_published=True)
+        return [p for p in products if p.is_published]
+
+
+class CategoryListView(ListView):
+    """
+    Cписок продуктов в конкретной категории с пагинатором и фильтром
+    """
+
+    model = Product
+    template_name = "category.html"
+    context_object_name = "products"
+    paginate_by = 4
+
+    def get_queryset(self) -> list[Product]:
+        category = get_object_or_404(Category, pk=self.kwargs["pk"])
+        return ProductServices.get_products_for_category(category)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context["category"] = get_object_or_404(Category, pk=self.kwargs["pk"])
+        return context
 
 
 class ContactsTemplateView(TemplateView):
