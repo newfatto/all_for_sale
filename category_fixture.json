@@ -1,0 +1,18 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Овощи",
+      "description": "Богаты витаминами и клетчаткой"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Фрукты",
+      "description": "Как овощи, только ещё и сладкие"
+    }
+  }
+]
